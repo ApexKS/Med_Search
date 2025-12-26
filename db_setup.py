@@ -1,11 +1,7 @@
 import sqlite3
+from sql_conn import conn, execute
 
-def conn():
-    return sqlite3.connect("medicines.db")
-
-cursor = conn.cursor()
-
-cursor.execute("""
+execute("""
     CREATE TABLE IF NOT EXISTS medicines (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         brand_name TEXT NOT NULL,
@@ -14,7 +10,7 @@ cursor.execute("""
     );
 """)
 
-cursor.execute("""
+execute("""
     CREATE TABLE IF NOT EXISTS ingredients (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         medicine_id INTEGER,
@@ -23,6 +19,15 @@ cursor.execute("""
         FOREIGN KEY (medicine_id) REFERENCES medicines(id)
     );
 """)
+
+execute('''
+    CREATE INDEX IF NOT EXISTS idx_medicines_brand
+        ON medicines (brand_name);
+    CREATE INDEX IF NOT EXISTS idx_medicines_generic
+        ON medicines (generic_name1);
+    CREATE INDEX IF NOT EXISTS idx_ingredients_name
+        ON ingredients (ingredient_name);
+''')
 
 conn.commit()
 conn.close()

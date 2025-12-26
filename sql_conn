@@ -1,0 +1,26 @@
+import sqlite3
+
+db_path = "medicines.db"
+
+def conn():
+    sqlite3.connect(db_path)
+    return conn
+
+def _execute(query, params=(),fetch="all"):
+    cursor = conn.cursor()
+
+    cursor.execute(query, params)
+
+    if fetch == "one":
+        result = cursor.fetchone()
+    elif fetch == "none":
+        result = cursor.fetchnone()
+    else:
+        result = cursor.fetchall()
+
+    conn.commit()
+    conn.close()
+
+    return result
+
+

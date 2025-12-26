@@ -1,12 +1,10 @@
 import sqlite3
 import pandas as pd
 import ast
-from db_setup import conn
+from sql_conn import conn, execute
 
-cursor = conn.cursor()
-
-cursor.execute("DELETE FROM ingredients")
-cursor.execute("DELETE FROM medicines")
+execute("DELETE FROM ingredients")
+execute("DELETE FROM medicines")
 conn.commit()
 
 df = pd.read_csv(r"csvs\indian_medicine_data.csv")
@@ -16,19 +14,20 @@ for _, row in df.iterrows():
     generic_name1 = row["generic_name1"]
     manufacturer = row["manufacturer"]
 
-    cursor.execute("""
+    execute("""
         INSERT INTO medicines (brand_name, manufacturer, generic_name1)
         VALUES (?, ?, ?)
     """,
         (brand_name, manufacturer, generic_name1)
     )
 
+    cursor = conn.cursor()
     medicine_id = cursor.lastrowid
 
     ingredients = ast.literal_eval(row["ingredients1"])
 
     for item in ingredients:
-        cursor.execute("""
+        execute("""
         INSERT INTO ingredients (medicine_id, ingredient_name, strength)
         VALUES (?, ?, ?)    
     """,

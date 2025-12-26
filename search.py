@@ -1,8 +1,8 @@
 import sqlite3
-from db_setup import conn
+from sql_conn import conn, execute
 
 def get_ingredients(medicine_id, cursor):
-    cursor.execute('''
+    execute('''
                     SELECT ingredient_name, strength
                     FROM ingredients
                     WHERE medicine_id = ?
@@ -13,16 +13,15 @@ def get_ingredients(medicine_id, cursor):
 
 
 def search_by_name(term):
-    cursor = conn.cursor()
 
     query = '''SELECT id, brand_name, generic_name1, manufacturer
                 FROM medicines
                 WHERE LOWER(brand_name) LIKE LOWER(?)'''
 
-    cursor.execute(query, (f"%{term}%",))
+    execute(query, (f"%{term}%",))
 
     medicines = []
-
+    cursor = conn.cursor()
     for row in cursor.fetchall():
         med_id, brand, generic, mfg = row
         ingredients = get_ingredients(med_id, cursor)
@@ -43,7 +42,6 @@ def search_by_name(term):
 
 
 def search_by_ingredient(term):
-    cursor = conn.cursor()
 
     query = '''
             SELECT m.id, m.brand_name, m.generic_name1, m.manufacturer
@@ -51,11 +49,10 @@ def search_by_ingredient(term):
             JOIN ingredients i ON m.id = i.medicine_id
             WHERE LOWER(i.ingredient_name) LIKE LOWER(?)'''
     
-    cursor.execute(query, (f"%{term}%",))
-#    return cursor.fetchall()
+    execute(query, (f"%{term}%",))
 
     medicines = []
-
+    cursor = conn.cursor()
     for row in cursor.fetchall():
         med_id, brand, generic, mfg = row
         ingredients = get_ingredients(med_id, cursor)
