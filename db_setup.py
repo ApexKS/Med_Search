@@ -1,4 +1,8 @@
-from sql_conn import conn, execute
+#replaced by schema.sql
+'''from sql_conn import connection, execute
+
+conn= connection()
+cursor= conn.cursor()
 
 execute("""
     CREATE TABLE IF NOT EXISTS medicines (
@@ -19,14 +23,15 @@ execute("""
     );
 """)
 
-execute('''
+cursor.executescript("""
     CREATE INDEX IF NOT EXISTS idx_medicines_brand
         ON medicines (brand_name);
     CREATE INDEX IF NOT EXISTS idx_medicines_generic
         ON medicines (generic_name1);
     CREATE INDEX IF NOT EXISTS idx_ingredients_name
         ON ingredients (ingredient_name);
-''')
+""")
 
 conn.commit()
 conn.close()
+'''

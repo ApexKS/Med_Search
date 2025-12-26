@@ -1,20 +1,20 @@
 import sqlite3
 
-db_path = "medicines.db"
+db_path = "db\medicines.db"
 
-def conn():
-    sqlite3.connect(db_path)
-    return conn
+def connection():
+    return sqlite3.connect(db_path)
+     
 
 def execute(query, params=(),fetch="all"):
+    conn = connection()
     cursor = conn.cursor()
-
     cursor.execute(query, params)
 
     if fetch == "one":
         result = cursor.fetchone()
     elif fetch == "none":
-        result = cursor.fetchnone()
+        result = None
     else:
         result = cursor.fetchall()
 
