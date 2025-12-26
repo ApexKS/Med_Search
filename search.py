@@ -10,14 +10,26 @@ def get_ingredients(medicine_id, cursor):
                     )
     return cursor.fetchall()
 
+def medicine_row_format(row):
+    return{
+        "id": row[0],
+        "brand_name": row[1],
+        "generic_name": row[2],
+        "manufacturer": row[3]
+    }
+
+BASE_MED_SELECT ="""
+SELECT m.id, m.brand_name, m.generic_name1, m.manufacturer
+FROM medicines m
+"""
+
+def run_search(where, params):
+    query= BASE_MED_SELECT + " " + where
+    rows = execute(query, params)
+    return [medicine_row_format(row) for row in rows]
 
 def search_by_name(term):
-
-    query = '''SELECT id, brand_name, generic_name1, manufacturer
-                FROM medicines
-                WHERE LOWER(brand_name) LIKE LOWER(?)'''
-
-    execute(query, (f"%{term}%",))
+    return run_search('''WHERE LOWER(brand_name) LIKE LOWER(?)''', (f"%{term}%",))
 
     medicines = []
     cursor = conn.cursor()
@@ -37,8 +49,6 @@ def search_by_name(term):
 
     conn.close()
     return medicines
-
-
 
 def search_by_ingredient(term):
 
@@ -70,6 +80,6 @@ def search_by_ingredient(term):
     return medicines
 
 if __name__ == "__main__":
-    results = search_by_ingredient("cef")
+    results = search_by_name("cef")
     for row in results:
         print(row)
