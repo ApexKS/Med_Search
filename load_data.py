@@ -1,4 +1,3 @@
-import sqlite3
 import pandas as pd
 import ast
 from sql_conn import conn, execute

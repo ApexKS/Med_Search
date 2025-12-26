@@ -6,7 +6,7 @@ def conn():
     sqlite3.connect(db_path)
     return conn
 
-def _execute(query, params=(),fetch="all"):
+def execute(query, params=(),fetch="all"):
     cursor = conn.cursor()
 
     cursor.execute(query, params)

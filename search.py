@@ -1,4 +1,3 @@
-import sqlite3
 from sql_conn import conn, execute
 
 def get_ingredients(medicine_id, cursor):
