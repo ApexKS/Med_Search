@@ -1,7 +1,5 @@
 import sqlite3
-
-def get_connection():
-    return sqlite3.connect("medicines.db")
+from db_setup import conn
 
 def get_ingredients(medicine_id, cursor):
     cursor.execute('''
@@ -15,7 +13,6 @@ def get_ingredients(medicine_id, cursor):
 
 
 def search_by_name(term):
-    conn= get_connection()
     cursor = conn.cursor()
 
     query = '''SELECT id, brand_name, generic_name1, manufacturer
@@ -46,7 +43,6 @@ def search_by_name(term):
 
 
 def search_by_ingredient(term):
-    conn = get_connection()
     cursor = conn.cursor()
 
     query = '''

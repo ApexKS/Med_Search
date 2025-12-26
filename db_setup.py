@@ -1,6 +1,7 @@
 import sqlite3
 
-conn= sqlite3.connect("medicines.db")
+def conn():
+    return sqlite3.connect("medicines.db")
 
 cursor = conn.cursor()
 

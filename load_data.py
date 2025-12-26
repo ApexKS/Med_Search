@@ -1,8 +1,8 @@
 import sqlite3
 import pandas as pd
 import ast
+from db_setup import conn
 
-conn = sqlite3.connect("medicines.db")
 cursor = conn.cursor()
 
 cursor.execute("DELETE FROM ingredients")
