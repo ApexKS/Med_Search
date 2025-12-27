@@ -5,7 +5,7 @@ from sql_conn import connection, execute
 conn = connection()
 cursor = conn.cursor()
 
-CSV_Path= Path(r"data\csv_cleaned.csv")
+CSV_Path= Path(r"C:\Users\Kaushik\Documents\csv_cleaned.csv")
 
 if not CSV_Path.exists():
     raise FileNotFoundError("CSV File not found")
@@ -44,7 +44,7 @@ try:
 
             for item in ingredients:
                 cursor.execute("""
-                INSERT INTO ingredients (medicine_id, ingredient_name, strength)
+                INSERT OR IGNORE INTO ingredients (medicine_id, ingredient_name, strength)
                 VALUES (?, ?, ?)    
                 """,
                 (medicine_id, item["ingredient"], item["strength"])

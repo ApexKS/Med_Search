@@ -2,8 +2,8 @@ CREATE TABLE IF NOT EXISTS medicines (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         brand_name TEXT NOT NULL,
         manufacturer TEXT,
-        generic_name1 TEXT
-        UNIQUE(brand_name, manufacturer)
+        generic_name1 TEXT,
+        UNIQUE (brand_name, manufacturer)
 );
 
 CREATE TABLE IF NOT EXISTS ingredients (

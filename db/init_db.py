@@ -8,7 +8,6 @@ def init_db():
     conn= sqlite3.connect(DB_Path)
     with open(Schema_Path, "r", encoding="utf-8") as f:
         conn.executescript(f.read())
-    conn.close()
 
 if __name__ == "__main__":
     init_db()
