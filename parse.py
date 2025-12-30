@@ -2,7 +2,7 @@ import pandas as pd
 import re
 from pathlib import Path
 
-CSV_Path= Path(r"data\csv_cleaned.csv")
+CSV_Path= Path(r"")
 
 if not CSV_Path.exists():
     raise FileNotFoundError("CSV File not found")

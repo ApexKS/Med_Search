@@ -14,10 +14,11 @@ df = pd.read_csv(CSV_Path)
 
 try:
     with conn:
-        for _, row in df.iterrows():
-            brand_name = row["brand_name"]
-            generic_name1 = row["generic_name1"]
-            manufacturer = row["manufacturer"]
+        for row in df.itertuples():
+            brand_name = row[0]
+            ingredients1 = row[3]
+            generic_name1 = row[1]
+            manufacturer = row[5]
 
             cursor.execute("""
                 INSERT OR IGNORE INTO medicines (brand_name, manufacturer, generic_name1)
@@ -50,8 +51,6 @@ try:
                 (medicine_id, item["ingredient"], item["strength"])
                 )
 
-    conn.commit()
-    conn.close()
 
 except Exception as e:
     print("Data load failed", e)

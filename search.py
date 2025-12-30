@@ -97,6 +97,7 @@ def search_by_ingredient(term):
     return run_search("""WHERE LOWER(i.ingredient_name) LIKE LOWER(?)""",(f"%{term}%",))
     
 if __name__ == "__main__":
-    results = unified_search("paracetamol")
+    results = unified_search("ultramed")
     for row in results:
-        print(row["brand_name"], "-", row["reason"])
+        print(row)        
+        #print(row["brand_name"], "-", row["reason"])
