@@ -5,7 +5,7 @@ from sql_conn import connection, execute
 conn = connection()
 cursor = conn.cursor()
 
-CSV_Path= Path(r"C:\Users\Kaushik\Documents\csv_cleaned.csv")
+CSV_Path= Path(r"F:\New folder (4)\csvs\csv_cleaned.csv")
 
 if not CSV_Path.exists():
     raise FileNotFoundError("CSV File not found")
@@ -14,17 +14,19 @@ df = pd.read_csv(CSV_Path)
 
 try:
     with conn:
-        for row in df.itertuples():
-            brand_name = row[0]
-            ingredients1 = row[3]
-            generic_name1 = row[1]
-            manufacturer = row[5]
+        for _, row in df.iterrows():
+            brand_name = row["brand_name"]
+            generic_name1 = row["generic_name1"]
+            generic_name2 = row["generic_name2"]
+            ingredients1 = row["ingredients1"]
+            ingredients2 = row["ngredients2"]
+            manufacturer = row["manufacturer"]
 
             cursor.execute("""
-                INSERT OR IGNORE INTO medicines (brand_name, manufacturer, generic_name1)
+                INSERT OR IGNORE INTO medicines (brand_name, manufacturer, generic_name1, generic_name2)
                 VALUES (?, ?, ?)
                 """,
-                (brand_name, manufacturer, generic_name1)
+                (brand_name, manufacturer, generic_name1, generic_name2)
             )
 
             cursor.execute("""
@@ -50,6 +52,7 @@ try:
                 """,
                 (medicine_id, item["ingredient"], item["strength"])
                 )
+
 
 
 except Exception as e:

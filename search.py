@@ -1,23 +1,23 @@
-from sql_conn import connection, execute
+from sql_conn import execute
 
 def medicine_row_format(row):
     return{
         "id": row[0],
         "brand_name": row[1],
         "manufacturer": row[2],
-        "ingredient_name": row[3],
-        "strength": row[4]
+        "ingredient_name1": row[3],
+        "strength1": row[4],
+        "ingredient_name2": row[5],
+        "strength2": row[6]
     }
 
 BASE_MED_SELECT ="""
-SELECT m.id, m.brand_name, m.manufacturer, i.ingredient_name, i.strength
+SELECT m.id, m.brand_name, m.manufacturer, i.ingredient_name1, i.strength2, i.ingredient_name2, i.strength2
 FROM medicines m
 JOIN ingredients i ON m.id = i.medicine_id
 """
 
 def unified_search(term):
-    conn = connection()
-    cursor = conn.cursor()
 
     term_l = term.lower()
     results = {}
@@ -79,11 +79,29 @@ def unified_search(term):
         }
     
     ranked = sorted(results.values(), key=lambda x: x["score"], reverse=True)
+    print(ranked)
+    grouped_results = []
+    seen = {}
 
-    for i in ranked:
-        i.pop("score")
+    for med in ranked:
+        med_id = med["id"]
+
+        if med_id not in seen:
+            seen[med_id] = {
+            "id": med_id,
+            "brand_name": med["brand_name"],
+            "manufacturer": med["manufacturer"],
+            "ingredients": [],
+            "reason": med["reason"] 
+            }
+
+        seen[med_id]["ingredients"].append({
+            "name": med["ingredient_name"],
+            "strength": med["strength"]
+        })
     
-    return ranked
+    grouped_results = list(seen.values())
+    return grouped_results
 
 def run_search(where, params):
     query= BASE_MED_SELECT + " " + where
@@ -94,10 +112,9 @@ def search_by_name(term):
     return run_search("""WHERE LOWER(m.brand_name) LIKE LOWER(?)""", (f"%{term}%",))
 
 def search_by_ingredient(term):
-    return run_search("""WHERE LOWER(i.ingredient_name) LIKE LOWER(?)""",(f"%{term}%",))
+    return run_search("""WHERE LOWER(i.ingredient_name1) LIKE LOWER(?)""", (f"%{term}%",))
     
 if __name__ == "__main__":
-    results = unified_search("ultramed")
-    for row in results:
-        print(row)        
+    results = unified_search("allegra")
+    print(results)        
         #print(row["brand_name"], "-", row["reason"])

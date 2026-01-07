@@ -1,6 +1,6 @@
 import sqlite3
 
-db_path = "db\medicines.db"
+db_path = r"db\medicines.db"
 
 def connection():
     return sqlite3.connect(db_path)

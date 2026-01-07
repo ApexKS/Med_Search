@@ -2,7 +2,7 @@ import pandas as pd
 import re
 from pathlib import Path
 
-CSV_Path= Path(r"")
+CSV_Path= Path(r"F:\New folder (4)\csvs\indian_medicine_data.csv")
 
 if not CSV_Path.exists():
     raise FileNotFoundError("CSV File not found")
@@ -16,6 +16,7 @@ df = df.rename(columns={
     "short_composition2": "comp2",
     "manufacturer_name": "manufacturer"
 })
+
 
 #removing extra space and maintaining case
 df["brand_name"] = df["brand_name"].str.strip().str.title()
@@ -60,4 +61,4 @@ final_columns = ["brand_name", "generic_name1", "generic_name2", "ingredients1",
 
 df_final = df[final_columns]
 
-df_final.to_csv(r"data\csv_cleaned.csv", index=False)
+df_final.to_csv(r"F:\New folder (4)\csvs\csv_cleaned.csv", index=False)
